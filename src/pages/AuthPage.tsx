@@ -31,15 +31,27 @@ export default function AuthPage({ onGuestMode }: AuthPageProps) {
     if (!email || !password || !name) return toast.error("Semua field wajib diisi");
     if (password.length < 6) return toast.error("Password minimal 6 karakter");
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    
+    // Attempt to sign up
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { display_name: name }, emailRedirectTo: window.location.origin },
+      options: { 
+        data: { display_name: name }, 
+        emailRedirectTo: window.location.origin 
+      },
     });
+
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Cek email kamu untuk verifikasi! 📧");
+      // If auto-confirm is enabled in Supabase Dashboard, 'data.session' will be present
+      if (data.session) {
+        toast.success("Pendaftaran berhasil! Selamat datang ✨");
+      } else {
+        // If auto-confirm is NOT enabled, user still needs to check email
+        toast.success("Cek email kamu untuk verifikasi! 📧");
+      }
     }
     setLoading(false);
   }
