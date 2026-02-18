@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LayoutDashboard, CheckSquare, BookOpen, Heart, Activity, Crown, Settings } from "lucide-react";
+import { LayoutDashboard, CheckSquare, BookOpen, Heart, Activity, Crown, Settings, UserCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { guestStorage } from "@/lib/guestStorage";
@@ -10,6 +10,7 @@ import IbadahTab from "@/pages/tabs/IbadahTab";
 import QuranTab from "@/pages/tabs/QuranTab";
 import SedekahTab from "@/pages/tabs/SedekahTab";
 import KesehatanTab from "@/pages/tabs/KesehatanTab";
+import ProfileTab from "@/pages/tabs/ProfileTab";
 import UpgradePage from "@/pages/UpgradePage";
 import PremiumHub from "@/pages/premium/PremiumHub";
 
@@ -19,6 +20,7 @@ const TABS = [
   { id: "quran", label: "Quran", icon: BookOpen },
   { id: "sedekah", label: "Sedekah", icon: Heart },
   { id: "kesehatan", label: "Sehat", icon: Activity },
+  { id: "profil", label: "Profil", icon: UserCircle },
 ];
 
 export default function Index() {
@@ -144,6 +146,17 @@ export default function Index() {
       case "quran": return <QuranTab isPremium={isPremium} onUpgrade={() => setActivePage("upgrade")} />;
       case "sedekah": return <SedekahTab isPremium={isPremium} onUpgrade={() => setActivePage("upgrade")} />;
       case "kesehatan": return <KesehatanTab isPremium={isPremium} onUpgrade={() => setActivePage("upgrade")} />;
+      case "profil": return (
+        <ProfileTab
+          onUpgrade={() => setActivePage("upgrade")}
+          guestProfile={guestProfile}
+          onGuestLogout={() => {
+            setIsGuest(false);
+            setGuestProfile(null);
+            setActiveTab("dashboard");
+          }}
+        />
+      );
       default: return null;
     }
   };
