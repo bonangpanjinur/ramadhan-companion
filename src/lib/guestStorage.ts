@@ -16,6 +16,11 @@ export const guestStorage = {
   remove(key: string) {
     localStorage.removeItem(PREFIX + key);
   },
+  clear() {
+    Object.keys(localStorage)
+      .filter(k => k.startsWith(PREFIX))
+      .forEach(k => localStorage.removeItem(k));
+  },
 };
 
 export function getTodayKey() {
